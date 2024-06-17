@@ -1,4 +1,5 @@
 Add-Type -AssemblyName PresentationFramework
+
 # Function to filter data based on search term
 function Search-Data {
     [CmdletBinding()]
@@ -18,13 +19,15 @@ $data = @(
     [PSCustomObject]@{Name = "John"; Age = 25; City = "New York" },
     [PSCustomObject]@{Name = "Jane"; Age = 30; City = "Los Angeles" },
     [PSCustomObject]@{Name = "Jim"; Age = 35; City = "Chicago" },
-    [PSCustomObject]@{Name = "Jill"; Age = 40; City = "Houston" }
+    [PSCustomObject]@{Name = "Jill"; Age = 40; City = "Houston" },
+    [PSCustomObject]@{Name = "Jack"; Age = 45; City = "Miami" },
+    [PSCustomObject]@{Name = "Jenny"; Age = 50; City = "San Francisco" }
 )
 
 [xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         Title="Search GUI" Height="350" Width="525">
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
@@ -49,6 +52,8 @@ $SearchBox = $window.FindName("SearchBox")
 $SearchButton = $window.FindName("SearchButton")
 $ResultsGrid = $window.FindName("ResultsGrid")
 
+# Set the data source for the grid
+$ResultsGrid.ItemsSource = $data
 
 # Event handler for Search button
 $SearchButton.Add_Click({
@@ -56,8 +61,13 @@ $SearchButton.Add_Click({
         $filterdData = Search-Data -searchTerm $searchTerm
         $ResultsGrid.ItemsSource = @($filterdData)
     })
-
-$ResultsGrid.ItemsSource = $data
+$SearchBox.Add_KeyDown({
+        if ($_.Key -eq "Enter") {
+            $searchTerm = $SearchBox.Text
+            $filterdData = Search-Data -searchTerm $searchTerm
+            $ResultsGrid.ItemsSource = @($filterdData)
+        }
+    })
 
 # Show the window
 $window.ShowDialog() | Out-Null
