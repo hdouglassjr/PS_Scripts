@@ -1,1 +1,1 @@
-Get-Command -Noun PSSessionConfiguration | select -Property Name
+Get-Command -Noun PSSessionConfiguration | Select-Object -Property Name
