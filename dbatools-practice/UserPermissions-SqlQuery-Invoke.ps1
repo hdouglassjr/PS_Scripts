@@ -22,4 +22,4 @@ ORDER BY
 
 $advWorksConnection = Connect-DbaInstance -SqlInstance 'ESPEED4\SQLEXPRESS' -Database 'AdventureWorks' -TrustServerCertificate
 
-Invoke-DbaQuery -SqlInstance $advWorksConnection -Query $SqlQuery | ft -AutoSize
+Invoke-DbaQuery -SqlInstance $advWorksConnection -Query $SqlQuery | Format-Table -AutoSize
